@@ -4,3 +4,4 @@ export { useDebounce, useDebouncedCallback, useDebouncedState } from './useDebou
 export { useKeyboardShortcuts, getShortcutDescriptions } from './useKeyboardShortcuts';
 export { useBlockStyles, useBlockInlineStyles } from './useBlockStyles';
 export { useScrollReveal } from './useScrollReveal';
+export { useInlineEditing, InlineEditable } from './useInlineEditing';

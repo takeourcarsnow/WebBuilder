@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useWebsiteStore, useEditorStore } from '@/stores';
-import { EditorToolbar, EditorSidebar } from '@/components/builder';
+import { EditorToolbar, EditorSidebar, OnboardingTour, KeyboardShortcutsOverlay } from '@/components/builder';
 import { WebsitePreview } from '@/components/preview';
 import { TemplateSelection } from '@/components/templates';
 import { ErrorBoundary } from '@/components/ui';
@@ -11,8 +11,9 @@ import { cn } from '@/lib/utils';
 
 export default function BuilderPage() {
   const { website } = useWebsiteStore();
-  const { setSelectedBlock } = useEditorStore();
+  const { setSelectedBlock, showKeyboardShortcuts, setShowKeyboardShortcuts, hasCompletedOnboarding } = useEditorStore();
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Enable keyboard shortcuts
   useKeyboardShortcuts();
@@ -23,6 +24,15 @@ export default function BuilderPage() {
       setShowTemplates(true);
     }
   }, [website]);
+
+  // Show onboarding for first-time users
+  useEffect(() => {
+    if (website && !hasCompletedOnboarding) {
+      // Delay slightly to let the UI render first
+      const timer = setTimeout(() => setShowOnboarding(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [website, hasCompletedOnboarding]);
 
   const handleTemplateComplete = () => {
     setShowTemplates(false);
@@ -55,6 +65,17 @@ export default function BuilderPage() {
           </ErrorBoundary>
         </main>
       </div>
+
+      {/* Onboarding Tour */}
+      {showOnboarding && (
+        <OnboardingTour onComplete={() => setShowOnboarding(false)} />
+      )}
+
+      {/* Keyboard Shortcuts Overlay */}
+      <KeyboardShortcutsOverlay
+        isOpen={showKeyboardShortcuts}
+        onClose={() => setShowKeyboardShortcuts(false)}
+      />
     </div>
   );
 }

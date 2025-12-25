@@ -1,13 +1,14 @@
-import type { BlockType, BlockContent, BlockStyle } from '@/types';
+import type { BlockType, BlockContent, BlockStyle, AnimationConfig } from '@/types';
 
 interface BlockDefinition {
   type: BlockType;
   name: string;
   description: string;
   icon: string;
-  category: 'layout' | 'content' | 'media' | 'interactive';
+  category: 'layout' | 'content' | 'media' | 'interactive' | 'advanced';
   defaultContent: BlockContent;
   defaultStyle: BlockStyle;
+  defaultAnimation?: AnimationConfig;
 }
 
 export const blockDefinitions: BlockDefinition[] = [
@@ -314,6 +315,262 @@ export const blockDefinitions: BlockDefinition[] = [
         { title: 'Project One', description: 'A brief description of the project', image: '', link: '', tags: ['Design', 'Development'] },
         { title: 'Project Two', description: 'Another amazing project', image: '', link: '', tags: ['Branding', 'Strategy'] },
       ],
+    },
+    defaultStyle: {
+      padding: 'large',
+      alignment: 'center',
+      width: 'wide',
+    },
+  },
+  // New Block Types
+  {
+    type: 'code',
+    name: 'Custom Code',
+    description: 'Add custom HTML, CSS, or JavaScript',
+    icon: 'Code2',
+    category: 'advanced',
+    defaultContent: {
+      html: '<div class="custom-block">\n  <p>Your custom HTML here</p>\n</div>',
+      css: '.custom-block {\n  padding: 20px;\n  text-align: center;\n}',
+      javascript: '// Your JavaScript code here',
+      showPreview: true,
+    },
+    defaultStyle: {
+      padding: 'medium',
+      width: 'full',
+    },
+  },
+  {
+    type: 'navigation',
+    name: 'Navigation Header',
+    description: 'Sticky navigation with logo and links',
+    icon: 'Menu',
+    category: 'layout',
+    defaultContent: {
+      logo: 'My Site',
+      logoUrl: '',
+      links: [
+        { label: 'Home', url: '#hero' },
+        { label: 'About', url: '#about' },
+        { label: 'Services', url: '#features' },
+        { label: 'Contact', url: '#contact' },
+      ],
+      sticky: true,
+      showCta: true,
+      ctaText: 'Get Started',
+      ctaUrl: '#contact',
+    },
+    defaultStyle: {
+      backgroundColor: '#ffffff',
+      textColor: '#1a1a1a',
+      padding: 'small',
+      width: 'full',
+    },
+  },
+  {
+    type: 'footer',
+    name: 'Footer',
+    description: 'Site footer with links and copyright',
+    icon: 'PanelBottom',
+    category: 'layout',
+    defaultContent: {
+      logo: 'My Site',
+      description: 'Building amazing digital experiences.',
+      columns: [
+        {
+          title: 'Quick Links',
+          links: [
+            { label: 'Home', url: '#' },
+            { label: 'About', url: '#about' },
+            { label: 'Services', url: '#services' },
+          ],
+        },
+        {
+          title: 'Contact',
+          links: [
+            { label: 'Email Us', url: 'mailto:hello@example.com' },
+            { label: 'Twitter', url: '#' },
+            { label: 'LinkedIn', url: '#' },
+          ],
+        },
+      ],
+      copyright: '© 2024 My Site. All rights reserved.',
+      showBackToTop: true,
+      showSocial: true,
+      socialLinks: [
+        { platform: 'twitter', url: '#' },
+        { platform: 'linkedin', url: '#' },
+        { platform: 'github', url: '#' },
+      ],
+    },
+    defaultStyle: {
+      backgroundColor: '#1a1a1a',
+      textColor: '#ffffff',
+      padding: 'large',
+      width: 'full',
+    },
+  },
+  {
+    type: 'faq',
+    name: 'FAQ Accordion',
+    description: 'Frequently asked questions with expandable answers',
+    icon: 'HelpCircle',
+    category: 'content',
+    defaultContent: {
+      title: 'Frequently Asked Questions',
+      subtitle: 'Find answers to common questions',
+      items: [
+        { question: 'What services do you offer?', answer: 'We offer a wide range of digital services including web design, development, and consulting.' },
+        { question: 'How long does a project typically take?', answer: 'Project timelines vary based on scope, but most projects are completed within 4-8 weeks.' },
+        { question: 'What is your pricing model?', answer: 'We offer flexible pricing based on project requirements. Contact us for a custom quote.' },
+        { question: 'Do you offer ongoing support?', answer: 'Yes, we provide maintenance and support packages to keep your website running smoothly.' },
+      ],
+      allowMultiple: false,
+    },
+    defaultStyle: {
+      padding: 'large',
+      alignment: 'left',
+      width: 'medium',
+    },
+  },
+  {
+    type: 'pricing',
+    name: 'Pricing Table',
+    description: 'Display pricing plans and features',
+    icon: 'CreditCard',
+    category: 'interactive',
+    defaultContent: {
+      title: 'Simple, Transparent Pricing',
+      subtitle: 'Choose the plan that works for you',
+      plans: [
+        {
+          name: 'Starter',
+          price: '$29',
+          period: '/month',
+          description: 'Perfect for individuals',
+          features: ['5 Projects', '10GB Storage', 'Email Support', 'Basic Analytics'],
+          buttonText: 'Get Started',
+          buttonUrl: '#',
+          highlighted: false,
+        },
+        {
+          name: 'Professional',
+          price: '$79',
+          period: '/month',
+          description: 'Best for growing teams',
+          features: ['Unlimited Projects', '100GB Storage', 'Priority Support', 'Advanced Analytics', 'Custom Domain'],
+          buttonText: 'Get Started',
+          buttonUrl: '#',
+          highlighted: true,
+        },
+        {
+          name: 'Enterprise',
+          price: '$199',
+          period: '/month',
+          description: 'For large organizations',
+          features: ['Everything in Pro', 'Unlimited Storage', '24/7 Support', 'Custom Integrations', 'SLA Guarantee'],
+          buttonText: 'Contact Sales',
+          buttonUrl: '#',
+          highlighted: false,
+        },
+      ],
+    },
+    defaultStyle: {
+      padding: 'large',
+      alignment: 'center',
+      width: 'wide',
+    },
+  },
+  {
+    type: 'stats',
+    name: 'Stats Counter',
+    description: 'Animated statistics and numbers',
+    icon: 'TrendingUp',
+    category: 'content',
+    defaultContent: {
+      title: 'Our Impact',
+      subtitle: 'Numbers that speak for themselves',
+      stats: [
+        { value: 500, suffix: '+', label: 'Happy Clients' },
+        { value: 1200, suffix: '+', label: 'Projects Completed' },
+        { value: 15, suffix: '', label: 'Years Experience' },
+        { value: 99, suffix: '%', label: 'Satisfaction Rate' },
+      ],
+      animateOnView: true,
+      duration: 2000,
+    },
+    defaultStyle: {
+      backgroundColor: '#0ea5e9',
+      textColor: '#ffffff',
+      padding: 'large',
+      alignment: 'center',
+      width: 'full',
+    },
+  },
+  {
+    type: 'map',
+    name: 'Map Embed',
+    description: 'Embed Google Maps or OpenStreetMap',
+    icon: 'MapPin',
+    category: 'media',
+    defaultContent: {
+      title: 'Find Us',
+      address: '123 Main Street, New York, NY 10001',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      zoom: 14,
+      mapType: 'roadmap',
+      showMarker: true,
+      height: 400,
+    },
+    defaultStyle: {
+      padding: 'medium',
+      width: 'full',
+      borderRadius: 'medium',
+    },
+  },
+  {
+    type: 'blog',
+    name: 'Blog Posts',
+    description: 'Display blog articles or news',
+    icon: 'FileText',
+    category: 'content',
+    defaultContent: {
+      title: 'Latest Articles',
+      subtitle: 'Insights and updates from our team',
+      posts: [
+        {
+          title: 'Getting Started with Web Design',
+          excerpt: 'Learn the fundamentals of creating beautiful and functional websites.',
+          image: '',
+          date: '2024-01-15',
+          author: 'John Doe',
+          category: 'Design',
+          url: '#',
+        },
+        {
+          title: 'The Future of Digital Marketing',
+          excerpt: 'Explore emerging trends and technologies shaping the industry.',
+          image: '',
+          date: '2024-01-10',
+          author: 'Jane Smith',
+          category: 'Marketing',
+          url: '#',
+        },
+        {
+          title: 'Building Scalable Applications',
+          excerpt: 'Best practices for creating apps that grow with your business.',
+          image: '',
+          date: '2024-01-05',
+          author: 'Mike Johnson',
+          category: 'Development',
+          url: '#',
+        },
+      ],
+      layout: 'grid',
+      showDate: true,
+      showAuthor: true,
+      showCategory: true,
     },
     defaultStyle: {
       padding: 'large',

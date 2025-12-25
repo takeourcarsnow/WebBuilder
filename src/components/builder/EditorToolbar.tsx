@@ -23,11 +23,20 @@ import {
   Copy,
   Clipboard,
   Clock,
+  RotateCcw,
+  Columns,
+  Camera,
+  Code,
+  Globe,
 } from 'lucide-react';
 import { useEditorStore, useThemeStore, useWebsiteStore, useCanUndo, useCanRedo, useHistoryStore, useClipboardStore, useHasClipboard } from '@/stores';
 import { Button, Tooltip, TooltipProvider, Modal } from '@/components/ui';
+import { AutoSaveIndicator } from './AutoSaveIndicator';
 import { getShortcutDescriptions } from '@/hooks';
 import { downloadHtmlFile } from '@/lib/utils/exportHtml';
+import { downloadReactFile } from '@/lib/utils/exportReact';
+import { downloadTailwindFile } from '@/lib/utils/exportTailwind';
+import { downloadPWAFiles } from '@/lib/utils/exportPWA';
 import { cn } from '@/lib/utils';
 import type { DevicePreview } from '@/stores/editorStore';
 
@@ -50,6 +59,12 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
     addNotification,
     selectedBlockId,
     setSelectedBlock,
+    sideBySidePreview,
+    toggleSideBySidePreview,
+    isLandscapeMode,
+    toggleLandscapeMode,
+    showKeyboardShortcuts,
+    setShowKeyboardShortcuts,
   } = useEditorStore();
 
   const canUndo = useCanUndo();
@@ -63,6 +78,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
   const [showShortcuts, setShowShortcuts] = React.useState(false);
   const [showExportMenu, setShowExportMenu] = React.useState(false);
   const [lastSaved, setLastSaved] = React.useState<Date>(new Date());
+  const [isSaving, setIsSaving] = React.useState(false);
 
   // Update last saved when website changes
   React.useEffect(() => {
@@ -101,12 +117,50 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
     setShowExportMenu(false);
   };
 
-  const handleSave = () => {
-    setLastSaved(new Date());
+  const handleExportReact = () => {
+    if (!website) return;
+
+    downloadReactFile(website);
     addNotification({
       type: 'success',
-      message: 'Changes saved',
+      message: 'Website exported as React component',
     });
+    setShowExportMenu(false);
+  };
+
+  const handleExportTailwind = () => {
+    if (!website) return;
+
+    downloadTailwindFile(website);
+    addNotification({
+      type: 'success',
+      message: 'Website exported as Tailwind HTML',
+    });
+    setShowExportMenu(false);
+  };
+
+  const handleExportPWA = () => {
+    if (!website) return;
+
+    downloadPWAFiles(website);
+    addNotification({
+      type: 'success',
+      message: 'PWA files exported (manifest, service worker, offline page)',
+    });
+    setShowExportMenu(false);
+  };
+
+  const handleSave = () => {
+    setIsSaving(true);
+    // Simulate save
+    setTimeout(() => {
+      setLastSaved(new Date());
+      setIsSaving(false);
+      addNotification({
+        type: 'success',
+        message: 'Changes saved',
+      });
+    }, 500);
   };
 
   const handleUndo = () => {
@@ -171,6 +225,18 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
   ];
 
   const historyInfo = getHistoryInfo();
+
+  // Sync with store's keyboard shortcuts state
+  React.useEffect(() => {
+    if (showKeyboardShortcuts !== showShortcuts) {
+      setShowShortcuts(showKeyboardShortcuts);
+    }
+  }, [showKeyboardShortcuts]);
+
+  const handleShowShortcuts = (show: boolean) => {
+    setShowShortcuts(show);
+    setShowKeyboardShortcuts(show);
+  };
 
   return (
     <TooltipProvider>
@@ -264,10 +330,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
           <h1 className="text-sm font-medium text-gray-900 dark:text-white">
             {website?.name || 'Untitled Website'}
           </h1>
-          <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
-            <Clock className="h-3 w-3" />
-            Saved {formatLastSaved(lastSaved)}
-          </span>
+          <AutoSaveIndicator isSaving={isSaving} lastSaved={lastSaved} />
         </div>
 
         {/* Right section */}
@@ -319,6 +382,30 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
                 </Button>
               </Tooltip>
             ))}
+            
+            {/* Landscape mode toggle for mobile/tablet */}
+            {(devicePreview === 'mobile' || devicePreview === 'tablet') && (
+              <Tooltip content={isLandscapeMode ? 'Portrait mode' : 'Landscape mode'}>
+                <Button
+                  variant={isLandscapeMode ? 'secondary' : 'ghost'}
+                  size="icon-sm"
+                  onClick={toggleLandscapeMode}
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+            )}
+            
+            {/* Side by side preview */}
+            <Tooltip content={sideBySidePreview ? 'Single view' : 'Side-by-side preview'}>
+              <Button
+                variant={sideBySidePreview ? 'secondary' : 'ghost'}
+                size="icon-sm"
+                onClick={toggleSideBySidePreview}
+              >
+                <Columns className="h-4 w-4" />
+              </Button>
+            </Tooltip>
           </div>
 
           <Tooltip content={isPreviewMode ? 'Exit preview (Ctrl+P)' : 'Preview (Ctrl+P)'}>
@@ -374,20 +461,43 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
                   className="fixed inset-0 z-40" 
                   onClick={() => setShowExportMenu(false)} 
                 />
-                <div className="absolute right-0 top-full mt-2 z-50 w-48 rounded-ios-lg border border-gray-200 bg-white p-1 shadow-ios dark:border-gray-700 dark:bg-surface-dark-elevated">
+                <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-ios-lg border border-gray-200 bg-white p-1 shadow-ios dark:border-gray-700 dark:bg-surface-dark-elevated">
+                  <p className="px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Export</p>
                   <button
                     onClick={handleExportJson}
                     className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
                   >
                     <Download className="h-4 w-4" />
-                    Export as JSON
+                    JSON (Data backup)
                   </button>
                   <button
                     onClick={handleExportHtml}
                     className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
                   >
                     <FileCode className="h-4 w-4" />
-                    Export as HTML
+                    HTML (Static site)
+                  </button>
+                  <button
+                    onClick={handleExportTailwind}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
+                  >
+                    <Code className="h-4 w-4" />
+                    Tailwind HTML
+                  </button>
+                  <button
+                    onClick={handleExportReact}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
+                  >
+                    <Code className="h-4 w-4" />
+                    React Component
+                  </button>
+                  <div className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
+                  <button
+                    onClick={handleExportPWA}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
+                  >
+                    <Globe className="h-4 w-4" />
+                    PWA Files
                   </button>
                 </div>
               </>
@@ -404,7 +514,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
       {/* Keyboard shortcuts modal */}
       <Modal
         open={showShortcuts}
-        onOpenChange={setShowShortcuts}
+        onOpenChange={handleShowShortcuts}
         title="Keyboard Shortcuts"
       >
         <div className="space-y-3">

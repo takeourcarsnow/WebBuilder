@@ -10,6 +10,7 @@ export interface BlockStyleClasses {
   shadowClass: string;
   animationClass: string;
   containerClass: string;
+  containerStyle: React.CSSProperties;
 }
 
 /**
@@ -25,6 +26,11 @@ export function useBlockStyles(style: BlockStyle): BlockStyleClasses {
     const animationClass = BLOCK_STYLE_CLASSES.animation[style.animation || 'none'];
 
     const containerClass = `${paddingClass} ${widthClass}`;
+    
+    const containerStyle: React.CSSProperties = {
+      backgroundColor: style.backgroundColor,
+      color: style.textColor,
+    };
 
     return {
       paddingClass,
@@ -34,6 +40,7 @@ export function useBlockStyles(style: BlockStyle): BlockStyleClasses {
       shadowClass,
       animationClass,
       containerClass,
+      containerStyle,
     };
   }, [style]);
 }

@@ -2,3 +2,9 @@ export { colors, fonts, spacing, animations, borderRadius, shadows, DEVICE_DIMEN
 export { blockDefinitions, getBlockDefinition, getBlocksByCategory } from './blocks';
 export { blockPresets, getPresetsByType, getPresetsByCategory, getPresetById } from './presets';
 export type { BlockPreset } from './presets';
+export { 
+  themePresets, 
+  getThemePresetsByCategory, 
+  getThemePresetById,
+} from './themePresets';
+export type { ThemePreset, ThemePresetCategory } from '@/types/website';

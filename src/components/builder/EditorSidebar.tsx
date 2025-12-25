@@ -2,11 +2,12 @@
 
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Blocks, Palette, Settings } from 'lucide-react';
+import { Blocks, Palette, Settings, Layers } from 'lucide-react';
 import { useEditorStore } from '@/stores';
 import { BlockPanel } from './BlockPanel';
 import { StylePanel } from './StylePanel';
 import { SettingsPanel } from './SettingsPanel';
+import { LayersPanel } from './LayersPanel';
 import { cn } from '@/lib/utils';
 
 interface EditorSidebarProps {
@@ -17,12 +18,14 @@ interface EditorSidebarProps {
 const MemoizedBlockPanel = memo(BlockPanel);
 const MemoizedStylePanel = memo(StylePanel);
 const MemoizedSettingsPanel = memo(SettingsPanel);
+const MemoizedLayersPanel = memo(LayersPanel);
 
 export const EditorSidebar: React.FC<EditorSidebarProps> = ({ className }) => {
   const { isSidebarOpen, activeSidebarTab, setActiveSidebarTab } = useEditorStore();
 
   const tabs = [
     { id: 'blocks', label: 'Blocks', icon: Blocks },
+    { id: 'layers', label: 'Layers', icon: Layers },
     { id: 'style', label: 'Style', icon: Palette },
     { id: 'settings', label: 'Settings', icon: Settings },
   ] as const;
@@ -87,6 +90,19 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({ className }) => {
                   className="h-full pt-4"
                 >
                   <MemoizedBlockPanel />
+                </motion.div>
+              )}
+
+              {activeSidebarTab === 'layers' && (
+                <motion.div
+                  key="layers"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.15 }}
+                  className="h-full"
+                >
+                  <MemoizedLayersPanel />
                 </motion.div>
               )}
 

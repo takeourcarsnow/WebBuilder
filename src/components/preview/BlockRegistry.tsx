@@ -21,6 +21,16 @@ const TestimonialsBlock = lazy(() => import('./blocks/TestimonialsBlock').then(m
 const SocialLinksBlock = lazy(() => import('./blocks/SocialLinksBlock').then(m => ({ default: m.SocialLinksBlock })));
 const GalleryBlock = lazy(() => import('./blocks/GalleryBlock').then(m => ({ default: m.GalleryBlock })));
 
+// New block types
+const CodeBlock = lazy(() => import('./blocks/CodeBlock').then(m => ({ default: m.CodeBlock })));
+const NavigationBlock = lazy(() => import('./blocks/NavigationBlock').then(m => ({ default: m.NavigationBlock })));
+const FooterBlock = lazy(() => import('./blocks/FooterBlock').then(m => ({ default: m.FooterBlock })));
+const FAQBlock = lazy(() => import('./blocks/FAQBlock').then(m => ({ default: m.FAQBlock })));
+const PricingBlock = lazy(() => import('./blocks/PricingBlock').then(m => ({ default: m.PricingBlock })));
+const StatsBlock = lazy(() => import('./blocks/StatsBlock').then(m => ({ default: m.StatsBlock })));
+const MapBlock = lazy(() => import('./blocks/MapBlock').then(m => ({ default: m.MapBlock })));
+const BlogBlock = lazy(() => import('./blocks/BlogBlock').then(m => ({ default: m.BlogBlock })));
+
 // Block component type
 type BlockComponent = ComponentType<{ block: WebsiteBlock }>;
 
@@ -40,6 +50,15 @@ const blockRegistry = new Map<BlockType, BlockComponent>([
   ['testimonials', TestimonialsBlock],
   ['social-links', SocialLinksBlock],
   ['gallery', GalleryBlock],
+  // New blocks
+  ['code', CodeBlock],
+  ['navigation', NavigationBlock],
+  ['footer', FooterBlock],
+  ['faq', FAQBlock],
+  ['pricing', PricingBlock],
+  ['stats', StatsBlock],
+  ['map', MapBlock],
+  ['blog', BlogBlock],
 ]);
 
 // Get a block component from the registry

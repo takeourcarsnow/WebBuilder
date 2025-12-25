@@ -142,6 +142,7 @@ export const DEVICE_DIMENSIONS = {
   desktop: { width: '100%', maxWidth: '1280px' },
   tablet: { width: '768px', maxWidth: '768px' },
   mobile: { width: '375px', maxWidth: '375px' },
+  'mobile-landscape': { width: '667px', maxWidth: '667px' },
 } as const;
 
 // Z-index scale for consistent layering

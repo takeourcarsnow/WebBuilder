@@ -5,3 +5,8 @@ export { SettingsPanel } from './SettingsPanel';
 export { EditorToolbar } from './EditorToolbar';
 export { EditorSidebar } from './EditorSidebar';
 export { BlockContextMenu, useContextMenu } from './BlockContextMenu';
+export { LayersPanel } from './LayersPanel';
+export { KeyboardShortcutsOverlay } from './KeyboardShortcutsOverlay';
+export { OnboardingTour } from './OnboardingTour';
+export { BlockQuickActions } from './BlockQuickActions';
+export { AutoSaveIndicator } from './AutoSaveIndicator';

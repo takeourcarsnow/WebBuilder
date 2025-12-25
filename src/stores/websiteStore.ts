@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Website, WebsiteBlock, WebsiteSettings, BlockType, BlockContent, BlockStyle } from '@/types';
+import type { Website, WebsiteBlock, WebsiteSettings, BlockType, BlockContent, BlockStyle, BlockGroup, AnimationConfig } from '@/types';
 import { generateId } from '@/lib/utils';
 import { getBlockDefinition } from '@/lib/constants';
 
@@ -24,6 +24,38 @@ interface WebsiteState {
   duplicateBlock: (blockId: string) => WebsiteBlock | null;
   moveBlock: (blockId: string, newIndex: number) => void;
   reorderBlocks: (activeId: string, overId: string) => void;
+  
+  // Bulk block actions
+  deleteBlocks: (blockIds: string[]) => void;
+  duplicateBlocks: (blockIds: string[]) => WebsiteBlock[];
+  
+  // Block locking
+  toggleBlockLock: (blockId: string) => void;
+  lockBlocks: (blockIds: string[]) => void;
+  unlockBlocks: (blockIds: string[]) => void;
+  
+  // Block visibility
+  toggleBlockVisibility: (blockId: string) => void;
+  hideBlocks: (blockIds: string[]) => void;
+  showBlocks: (blockIds: string[]) => void;
+  
+  // Block comments
+  setBlockComment: (blockId: string, comment: string) => void;
+  clearBlockComment: (blockId: string) => void;
+  
+  // Block animation
+  setBlockAnimation: (blockId: string, animation: AnimationConfig) => void;
+  
+  // Block custom CSS
+  setBlockCustomCSS: (blockId: string, css: string) => void;
+  
+  // Block grouping
+  createGroup: (name: string, blockIds: string[]) => BlockGroup;
+  deleteGroup: (groupId: string) => void;
+  renameGroup: (groupId: string, name: string) => void;
+  addBlocksToGroup: (groupId: string, blockIds: string[]) => void;
+  removeBlocksFromGroup: (blockIds: string[]) => void;
+  toggleGroupCollapse: (groupId: string) => void;
   
   // Settings actions
   updateSettings: (settings: Partial<WebsiteSettings>) => void;
@@ -312,6 +344,327 @@ export const useWebsiteStore = create<WebsiteState>()(
                 ...state.website.settings,
                 ...settings,
               },
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Bulk block actions
+      deleteBlocks: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks
+                .filter((b) => !blockIds.includes(b.id))
+                .map((b, i) => ({ ...b, order: i })),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      duplicateBlocks: (blockIds) => {
+        const website = get().website;
+        if (!website) return [];
+
+        const blocksToDuplicate = website.blocks.filter((b) => blockIds.includes(b.id));
+        const newBlocks: WebsiteBlock[] = blocksToDuplicate.map((block) => ({
+          ...block,
+          id: generateId(),
+          content: { ...block.content },
+          style: { ...block.style },
+          order: website.blocks.length,
+        }));
+
+        set((state) => {
+          if (!state.website) return state;
+
+          const updatedBlocks = [...state.website.blocks, ...newBlocks].map((b, i) => ({ ...b, order: i }));
+
+          return {
+            website: {
+              ...state.website,
+              blocks: updatedBlocks,
+              updatedAt: new Date(),
+            },
+          };
+        });
+
+        return newBlocks;
+      },
+      
+      // Block locking
+      toggleBlockLock: (blockId) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, isLocked: !b.isLocked } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      lockBlocks: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, isLocked: true } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      unlockBlocks: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, isLocked: false } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Block visibility
+      toggleBlockVisibility: (blockId) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, isVisible: b.isVisible === false ? true : false } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      hideBlocks: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, isVisible: false } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      showBlocks: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, isVisible: true } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Block comments
+      setBlockComment: (blockId, comment) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, comment } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      clearBlockComment: (blockId) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, comment: undefined } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Block animation
+      setBlockAnimation: (blockId, animation) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, animation } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Block custom CSS
+      setBlockCustomCSS: (blockId, css) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                b.id === blockId ? { ...b, customCSS: css } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+      
+      // Block grouping
+      createGroup: (name, blockIds) => {
+        const groupId = generateId();
+        const newGroup: BlockGroup = {
+          id: groupId,
+          name,
+          isCollapsed: false,
+          order: get().website?.groups?.length || 0,
+        };
+
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              groups: [...(state.website.groups || []), newGroup],
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, groupId } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+
+        return newGroup;
+      },
+
+      deleteGroup: (groupId) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              groups: (state.website.groups || []).filter((g) => g.id !== groupId),
+              blocks: state.website.blocks.map((b) =>
+                b.groupId === groupId ? { ...b, groupId: undefined } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      renameGroup: (groupId, name) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              groups: (state.website.groups || []).map((g) =>
+                g.id === groupId ? { ...g, name } : g
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      addBlocksToGroup: (groupId, blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, groupId } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      removeBlocksFromGroup: (blockIds) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              blocks: state.website.blocks.map((b) =>
+                blockIds.includes(b.id) ? { ...b, groupId: undefined } : b
+              ),
+              updatedAt: new Date(),
+            },
+          };
+        });
+      },
+
+      toggleGroupCollapse: (groupId) => {
+        set((state) => {
+          if (!state.website) return state;
+
+          return {
+            website: {
+              ...state.website,
+              groups: (state.website.groups || []).map((g) =>
+                g.id === groupId ? { ...g, isCollapsed: !g.isCollapsed } : g
+              ),
               updatedAt: new Date(),
             },
           };

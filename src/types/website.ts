@@ -15,10 +15,34 @@ export type BlockType =
   | 'social-links'
   | 'skills'
   | 'experience'
-  | 'projects';
+  | 'projects'
+  // New block types
+  | 'code'
+  | 'navigation'
+  | 'footer'
+  | 'faq'
+  | 'pricing'
+  | 'stats'
+  | 'map'
+  | 'blog';
 
 export interface BlockContent {
   [key: string]: string | string[] | number | boolean | BlockContent | BlockContent[];
+}
+
+// Animation configuration
+export interface AnimationConfig {
+  type: 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'scale' | 'rotate' | 'bounce';
+  duration: number; // in ms
+  delay: number; // in ms
+  easing: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'spring';
+  triggerOnce: boolean;
+}
+
+// Responsive style overrides
+export interface ResponsiveStyles {
+  mobile?: Partial<BlockStyle>;
+  tablet?: Partial<BlockStyle>;
 }
 
 export interface WebsiteBlock {
@@ -27,6 +51,14 @@ export interface WebsiteBlock {
   content: BlockContent;
   style: BlockStyle;
   order: number;
+  // New properties
+  isLocked?: boolean;
+  isVisible?: boolean;
+  comment?: string;
+  groupId?: string;
+  animation?: AnimationConfig;
+  responsiveStyles?: ResponsiveStyles;
+  customCSS?: string;
 }
 
 export interface BlockStyle {
@@ -40,11 +72,43 @@ export interface BlockStyle {
   animation?: 'none' | 'fade' | 'slide' | 'scale';
 }
 
+// Block group for organizing blocks
+export interface BlockGroup {
+  id: string;
+  name: string;
+  isCollapsed: boolean;
+  order: number;
+}
+
+// Style Preset System
+export interface StylePreset {
+  id: string;
+  name: string;
+  style: BlockStyle;
+  animation?: AnimationConfig;
+  category: 'user' | 'system';
+  createdAt: Date;
+}
+
+// Theme Preset System
+export type ThemePresetCategory = 'light' | 'dark' | 'colorful' | 'minimal';
+
+export interface ThemePreset {
+  id: string;
+  name: string;
+  description: string;
+  theme: ThemeSettings;
+  fonts: FontSettings;
+  category: ThemePresetCategory;
+  thumbnail?: string;
+}
+
 export interface Website {
   id: string;
   name: string;
   slug: string;
   blocks: WebsiteBlock[];
+  groups?: BlockGroup[];
   settings: WebsiteSettings;
   createdAt: Date;
   updatedAt: Date;
