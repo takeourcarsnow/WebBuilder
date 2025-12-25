@@ -24,7 +24,18 @@ export type BlockType =
   | 'pricing'
   | 'stats'
   | 'map'
-  | 'blog';
+  | 'blog'
+  // Additional new block types
+  | 'team'
+  | 'logo-cloud'
+  | 'newsletter'
+  | 'countdown'
+  | 'tabs'
+  | 'before-after'
+  | 'carousel'
+  | 'popup'
+  | 'announcement-bar'
+  | 'reviews';
 
 export interface BlockContent {
   [key: string]: string | string[] | number | boolean | BlockContent | BlockContent[];

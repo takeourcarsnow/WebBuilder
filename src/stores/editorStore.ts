@@ -70,9 +70,9 @@ interface EditorStore extends EditorState {
   
   // Sidebar
   isSidebarOpen: boolean;
-  activeSidebarTab: 'blocks' | 'style' | 'settings' | 'layers';
+  activeSidebarTab: 'blocks' | 'style' | 'settings' | 'layers' | 'ai' | 'seo' | 'accessibility' | 'design-tokens' | 'animation' | 'templates' | 'collaboration' | 'performance' | 'history' | 'workflows';
   setSidebarOpen: (isOpen: boolean) => void;
-  setActiveSidebarTab: (tab: 'blocks' | 'style' | 'settings' | 'layers') => void;
+  setActiveSidebarTab: (tab: 'blocks' | 'style' | 'settings' | 'layers' | 'ai' | 'seo' | 'accessibility' | 'design-tokens' | 'animation' | 'templates' | 'collaboration' | 'performance' | 'history' | 'workflows') => void;
   
   // Undo/Redo
   historyStack: HistoryEntry[];

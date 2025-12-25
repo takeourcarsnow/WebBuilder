@@ -20,3 +20,14 @@ export { PricingBlock } from './PricingBlock';
 export { StatsBlock } from './StatsBlock';
 export { MapBlock } from './MapBlock';
 export { BlogBlock } from './BlogBlock';
+// New block exports
+export { TeamBlock } from './TeamBlock';
+export { LogoCloudBlock } from './LogoCloudBlock';
+export { NewsletterBlock } from './NewsletterBlock';
+export { CountdownBlock } from './CountdownBlock';
+export { TabsBlock } from './TabsBlock';
+export { BeforeAfterBlock } from './BeforeAfterBlock';
+export { CarouselBlock } from './CarouselBlock';
+export { PopupBlock } from './PopupBlock';
+export { AnnouncementBarBlock } from './AnnouncementBarBlock';
+export { ReviewsBlock } from './ReviewsBlock';
