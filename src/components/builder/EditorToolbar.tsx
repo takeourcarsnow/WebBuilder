@@ -28,10 +28,12 @@ import {
   Camera,
   Code,
   Globe,
+  Cloud,
 } from 'lucide-react';
 import { useEditorStore, useThemeStore, useWebsiteStore, useCanUndo, useCanRedo, useHistoryStore, useClipboardStore, useHasClipboard } from '@/stores';
 import { Button, Tooltip, TooltipProvider, Modal } from '@/components/ui';
 import { AutoSaveIndicator } from './AutoSaveIndicator';
+import { DeploymentModal } from './DeploymentModal';
 import { getShortcutDescriptions } from '@/hooks';
 import { downloadHtmlFile } from '@/lib/utils/exportHtml';
 import { downloadReactFile } from '@/lib/utils/exportReact';
@@ -77,6 +79,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
   
   const [showShortcuts, setShowShortcuts] = React.useState(false);
   const [showExportMenu, setShowExportMenu] = React.useState(false);
+  const [showDeploymentModal, setShowDeploymentModal] = React.useState(false);
   const [lastSaved, setLastSaved] = React.useState<Date>(new Date());
   const [isSaving, setIsSaving] = React.useState(false);
 
@@ -499,6 +502,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
                     <Globe className="h-4 w-4" />
                     PWA Files
                   </button>
+                  <div className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
+                  <button
+                    onClick={() => {
+                      setShowExportMenu(false);
+                      setShowDeploymentModal(true);
+                    }}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50 dark:text-primary-400 dark:hover:bg-primary-500/10"
+                  >
+                    <Cloud className="h-4 w-4" />
+                    Deploy to Web
+                  </button>
                 </div>
               </>
             )}
@@ -530,6 +544,12 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
           ))}
         </div>
       </Modal>
+
+      {/* Deployment modal */}
+      <DeploymentModal
+        isOpen={showDeploymentModal}
+        onClose={() => setShowDeploymentModal(false)}
+      />
     </TooltipProvider>
   );
 };

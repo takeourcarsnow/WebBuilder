@@ -14,3 +14,12 @@ export {
   type PWAConfig,
   type PWAExportFiles 
 } from './exportPWA';
+export {
+  createVercelPackage,
+  createNetlifyPackage,
+  createGitHubPagesPackage,
+  downloadDeploymentPackage,
+  openVercelDeploy,
+  openNetlifyDeploy,
+  type DeploymentPackage
+} from './exportDeploy';

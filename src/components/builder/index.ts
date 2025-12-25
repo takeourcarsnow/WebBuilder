@@ -10,3 +10,4 @@ export { KeyboardShortcutsOverlay } from './KeyboardShortcutsOverlay';
 export { OnboardingTour } from './OnboardingTour';
 export { BlockQuickActions } from './BlockQuickActions';
 export { AutoSaveIndicator } from './AutoSaveIndicator';
+export { DeploymentModal } from './DeploymentModal';
