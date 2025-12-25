@@ -96,15 +96,29 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ className }) => 
   return (
     <div
       className={cn(
-        'flex h-full flex-col overflow-hidden bg-gray-100 dark:bg-surface-dark',
+        'flex h-full flex-col overflow-hidden',
         className
       )}
     >
-      {/* Preview container */}
-      <div className="flex flex-1 items-start justify-center overflow-auto p-4">
+      {/* Preview container with canvas-style background */}
+      <div className="relative flex flex-1 items-start justify-center overflow-auto p-8">
+        {/* Subtle canvas grid background */}
+        <div 
+          className="absolute inset-0 bg-gray-100/50 dark:bg-gray-900/50"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 1px 1px, rgba(0,0,0,0.07) 1px, transparent 0)
+            `,
+            backgroundSize: '20px 20px',
+          }}
+        />
+        
         <motion.div
           layout
-          className={containerClasses}
+          className={cn(
+            containerClasses,
+            'relative' // Ensure it's above the grid
+          )}
           style={{
             ...deviceStyles,
             transform: `scale(${zoom / 100})`,

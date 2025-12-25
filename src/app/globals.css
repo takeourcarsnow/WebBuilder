@@ -1,8 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Cal Sans alternative - Cabinet Grotesk as display font */
+@font-face {
+  font-family: 'Cal Sans';
+  src: local('Cabinet Grotesk Bold'), local('Inter');
+  font-weight: 700;
+  font-display: swap;
+}
 
 @layer base {
   * {

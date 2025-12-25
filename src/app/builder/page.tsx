@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useWebsiteStore, useEditorStore } from '@/stores';
-import { EditorToolbar, EditorSidebar, OnboardingTour, KeyboardShortcutsOverlay } from '@/components/builder';
+import { EditorToolbar, EditorSidebar, OnboardingTour, KeyboardShortcutsOverlay, CommandPalette } from '@/components/builder';
 import { WebsitePreview } from '@/components/preview';
 import { TemplateSelection } from '@/components/templates';
 import { ErrorBoundary } from '@/components/ui';
@@ -45,7 +45,10 @@ export default function BuilderPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-gray-50 dark:bg-surface-dark">
+    <div className="flex h-screen flex-col overflow-hidden bg-gray-50/50 dark:bg-surface-dark">
+      {/* Command Palette - Global */}
+      <CommandPalette />
+
       {/* Toolbar */}
       <ErrorBoundary>
         <EditorToolbar />

@@ -11,3 +11,5 @@ export { OnboardingTour } from './OnboardingTour';
 export { BlockQuickActions } from './BlockQuickActions';
 export { AutoSaveIndicator } from './AutoSaveIndicator';
 export { DeploymentModal } from './DeploymentModal';
+export { CommandPalette } from './CommandPalette';
+export { FloatingToolbar } from './FloatingToolbar';

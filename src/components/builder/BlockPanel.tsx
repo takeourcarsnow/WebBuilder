@@ -244,24 +244,15 @@ export const BlockPanel: React.FC<BlockPanelProps> = ({ className }) => {
 
   return (
     <div className={cn('flex flex-col h-full', className)}>
-      <div className="mb-4 px-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Add Blocks
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Click to add sections to your website
-        </p>
-      </div>
-
       {/* View toggle */}
-      <div className="px-4 mb-3">
-        <div className="flex rounded-ios-lg bg-gray-100 p-1 dark:bg-surface-dark-secondary">
+      <div className="px-4 mb-3 pt-2">
+        <div className="flex rounded-xl bg-gray-100/80 p-1 dark:bg-gray-800/80">
           <button
             onClick={() => setActiveView('blocks')}
             className={cn(
-              'flex-1 px-3 py-1.5 text-xs font-medium rounded-ios transition-colors',
+              'flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200',
               activeView === 'blocks'
-                ? 'bg-white text-gray-900 shadow-sm dark:bg-surface-dark-elevated dark:text-white'
+                ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             )}
           >
@@ -270,9 +261,9 @@ export const BlockPanel: React.FC<BlockPanelProps> = ({ className }) => {
           <button
             onClick={() => setActiveView('presets')}
             className={cn(
-              'flex-1 px-3 py-1.5 text-xs font-medium rounded-ios transition-colors flex items-center justify-center gap-1',
+              'flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-1',
               activeView === 'presets'
-                ? 'bg-white text-gray-900 shadow-sm dark:bg-surface-dark-elevated dark:text-white'
+                ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             )}
           >

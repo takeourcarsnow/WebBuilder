@@ -144,6 +144,7 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) =
       <motion.div
         ref={setNodeRef}
         style={style}
+        data-block-id={block.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
@@ -155,7 +156,7 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) =
         className={cn(
           'group relative transition-all duration-200',
           isDragging && 'opacity-50',
-          isSelected && 'ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900',
+          isSelected && 'ring-2 ring-primary-500/60 ring-offset-2 dark:ring-offset-gray-900',
           isLocked && 'cursor-not-allowed',
           isHidden && 'opacity-40'
         )}
