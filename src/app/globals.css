@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
-    
+    border-color: rgba(255, 255, 255, 0.1);
   }
   
   html {
@@ -14,17 +16,18 @@
   
   body {
     @apply bg-white text-gray-900 antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    letter-spacing: -0.01em;
   }
   
   .dark body {
     @apply bg-surface-dark text-white;
   }
 
-  /* iOS-style scrollbar */
+  /* Minimal scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -32,7 +35,8 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gray-300;
+    @apply bg-gray-400;
+    border-radius: 0;
   }
 
   .dark ::-webkit-scrollbar-thumb {
@@ -40,7 +44,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    @apply bg-gray-500;
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
@@ -49,27 +53,27 @@
 
   /* Selection */
   ::selection {
-    @apply bg-primary-500/20 text-primary-900;
+    @apply bg-accent-teal/20 text-gray-900;
   }
 
   .dark ::selection {
-    @apply bg-primary-500/30 text-primary-100;
+    @apply bg-accent-teal/30 text-white;
   }
 }
 
 @layer components {
   /* Glass effect */
   .glass {
-    @apply bg-white/80 backdrop-blur-ios;
+    @apply bg-white/60 backdrop-blur-xl border border-gray-200/50;
   }
   
   .dark .glass {
-    @apply bg-surface-dark/80;
+    @apply bg-surface-dark-elevated/60 border-gray-800/50;
   }
 
   /* Focus ring */
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-teal;
   }
 
   /* Smooth transitions for theme changes */
@@ -95,16 +99,35 @@
   }
 
   /* Animation delays */
+  .animation-delay-75 {
+    animation-delay: 75ms;
+  }
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
   .animation-delay-150 {
     animation-delay: 150ms;
   }
-  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
   .animation-delay-300 {
     animation-delay: 300ms;
   }
-  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
   .animation-delay-500 {
     animation-delay: 500ms;
+  }
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  .animation-delay-800 {
+    animation-delay: 800ms;
   }
 
   /* Shimmer animation for skeletons */
@@ -118,7 +141,14 @@
   }
 
   .animate-shimmer {
-    animation: shimmer 2s ease-in-out infinite;
+    animation: shimmer 2.5s ease-in-out infinite;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
   }
 
   /* Fade in animation */
@@ -132,14 +162,30 @@
   }
 
   .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
+    animation: fade-in 0.6s ease-out;
+  }
+
+  /* Fade in up animation */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s cubic-bezier(0.16, 0.8, 0.3, 1);
   }
 
   /* Slide up animation */
   @keyframes slide-up {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(30px);
     }
     to {
       opacity: 1;
@@ -148,14 +194,14 @@
   }
 
   .animate-slide-up {
-    animation: slide-up 0.3s ease-out;
+    animation: slide-up 0.6s cubic-bezier(0.16, 0.8, 0.3, 1);
   }
 
   /* Scale in animation */
   @keyframes scale-in {
     from {
       opacity: 0;
-      transform: scale(0.95);
+      transform: scale(0.9);
     }
     to {
       opacity: 1;
@@ -164,6 +210,75 @@
   }
 
   .animate-scale-in {
-    animation: scale-in 0.2s ease-out;
+    animation: scale-in 0.5s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+
+  /* Text reveal animation */
+  @keyframes text-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 0.8s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+
+  /* Blur in animation */
+  @keyframes blur-in {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+
+  .animate-blur-in {
+    animation: blur-in 0.8s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    animation: fade-in-up 0.8s cubic-bezier(0.16, 0.8, 0.3, 1) both;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 500ms; }
+  .stagger-children > *:nth-child(7) { animation-delay: 600ms; }
+  .stagger-children > *:nth-child(8) { animation-delay: 700ms; }
+  .stagger-children > *:nth-child(9) { animation-delay: 800ms; }
+
+  /* Smooth hover transitions */
+  .smooth-hover {
+    transition: all 0.3s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+
+  .smooth-hover:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Reveal on scroll */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 0.8, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+
+  .reveal-on-scroll.revealed {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -36,8 +36,8 @@ export const Modal: React.FC<ModalProps> = ({
         <DialogPrimitive.Content
           className={cn(
             'fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
-            'rounded-ios-xl bg-white p-6 shadow-ios-lg',
-            'dark:bg-surface-dark-elevated dark:shadow-ios-dark-lg',
+            'border border-gray-200 bg-white p-6 shadow-palantir-xl',
+            'dark:border-gray-800 dark:bg-surface-dark-elevated',
             'data-[state=open]:animate-scale-in',
             'max-h-[90vh] overflow-y-auto',
             className

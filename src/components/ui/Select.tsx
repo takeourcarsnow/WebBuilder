@@ -32,10 +32,10 @@ export const Select: React.FC<SelectProps> = ({
       <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
         <SelectPrimitive.Trigger
           className={cn(
-            'flex h-10 w-full items-center justify-between rounded-ios border border-gray-300 bg-white px-3 py-2 text-sm',
-            'focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20',
+            'flex h-10 w-full items-center justify-between border border-gray-300 bg-white px-3 py-2 text-sm',
+            'focus:border-accent-teal focus:outline-none',
             'dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-white',
-            'placeholder:text-gray-400 dark:placeholder:text-gray-500'
+            'placeholder:text-gray-500 dark:placeholder:text-gray-600'
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
@@ -47,8 +47,8 @@ export const Select: React.FC<SelectProps> = ({
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className={cn(
-              'relative z-50 min-w-[8rem] overflow-hidden rounded-ios border border-gray-200 bg-white shadow-ios-lg',
-              'dark:border-gray-700 dark:bg-surface-dark-elevated dark:shadow-ios-dark-lg',
+              'relative z-50 min-w-[8rem] overflow-hidden border border-gray-200 bg-white shadow-palantir-lg',
+              'dark:border-gray-800 dark:bg-surface-dark-elevated',
               'animate-fade-in'
             )}
             position="popper"
@@ -60,8 +60,8 @@ export const Select: React.FC<SelectProps> = ({
                   key={option.value}
                   value={option.value}
                   className={cn(
-                    'relative flex cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none',
-                    'focus:bg-gray-100 dark:focus:bg-surface-dark-secondary',
+                    'relative flex cursor-pointer select-none items-center py-2 pl-8 pr-3 text-sm outline-none',
+                    'focus:bg-gray-50 dark:focus:bg-surface-dark-secondary',
                     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
                   )}
                 >

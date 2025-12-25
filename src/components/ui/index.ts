@@ -21,3 +21,4 @@ export {
   CardSkeleton, 
   BlockPanelSkeleton 
 } from './Skeleton';
+export { AnimatedText, FadeIn, StaggerContainer, StaggerItem } from './AnimatedText';

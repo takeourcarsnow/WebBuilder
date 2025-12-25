@@ -3,3 +3,4 @@ export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop } from './useMedi
 export { useDebounce, useDebouncedCallback, useDebouncedState } from './useDebounce';
 export { useKeyboardShortcuts, getShortcutDescriptions } from './useKeyboardShortcuts';
 export { useBlockStyles, useBlockInlineStyles } from './useBlockStyles';
+export { useScrollReveal } from './useScrollReveal';

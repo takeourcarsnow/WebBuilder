@@ -13,28 +13,28 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', hoverable = false, children, ...props }, ref) => {
     const paddingClasses = {
       none: '',
-      sm: 'p-3',
-      md: 'p-4',
-      lg: 'p-6',
+      sm: 'p-4',
+      md: 'p-6',
+      lg: 'p-8',
     };
 
     const variantClasses = {
       default:
         'bg-white dark:bg-surface-dark-elevated border border-gray-200 dark:border-gray-800',
       elevated:
-        'bg-white dark:bg-surface-dark-elevated shadow-ios dark:shadow-ios-dark',
+        'bg-white dark:bg-surface-dark-elevated shadow-palantir',
       outlined:
-        'border border-gray-200 dark:border-gray-700 bg-transparent',
+        'border border-gray-200 dark:border-gray-800 bg-transparent',
     };
 
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-ios-lg transition-all duration-200',
+          'transition-all duration-200',
           variantClasses[variant],
           paddingClasses[padding],
-          hoverable && 'hover:shadow-ios-lg dark:hover:shadow-ios-dark-lg cursor-pointer',
+          hoverable && 'hover:shadow-palantir-lg hover:border-gray-300 dark:hover:border-gray-700 cursor-pointer',
           className
         )}
         {...props}

@@ -1,6 +1,6 @@
-# WebBuilder - Personal Website Builder
+# Stacky - Enterprise Web Platform
 
-A beautiful, iOS-inspired website builder that lets anyone create stunning personal websites without any coding knowledge.
+A powerful, Palantir-inspired web development platform for building production-grade applications with enterprise-level capabilities.
 
 ## Features
 
@@ -117,4 +117,4 @@ MIT License - feel free to use this for your own projects!
 
 ---
 
-Built with ❤️ using Next.js and Tailwind CSS
+Built with precision using Next.js and Tailwind CSS

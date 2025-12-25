@@ -5,27 +5,27 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-ios font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+  'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-teal disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   {
     variants: {
       variant: {
         primary:
-          'bg-primary-500 text-white hover:bg-primary-600 shadow-ios dark:shadow-ios-dark',
+          'bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100',
         secondary:
           'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-surface-dark-secondary dark:text-white dark:hover:bg-surface-dark-elevated',
         outline:
-          'border border-gray-300 bg-transparent hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-surface-dark-secondary',
+          'border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-surface-dark-secondary',
         ghost:
-          'hover:bg-gray-100 dark:hover:bg-surface-dark-secondary',
+          'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-surface-dark-secondary',
         danger:
-          'bg-red-500 text-white hover:bg-red-600',
+          'bg-red-600 text-white hover:bg-red-700',
         success:
-          'bg-emerald-500 text-white hover:bg-emerald-600',
+          'bg-emerald-600 text-white hover:bg-emerald-700',
       },
       size: {
-        sm: 'h-8 px-3 text-sm',
+        sm: 'h-8 px-3 text-xs',
         md: 'h-10 px-4 text-sm',
-        lg: 'h-12 px-6 text-base',
+        lg: 'h-12 px-6 text-sm',
         icon: 'h-10 w-10',
         'icon-sm': 'h-8 w-8',
       },

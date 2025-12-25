@@ -6,54 +6,55 @@ import Link from 'next/link';
 import {
   Sparkles,
   Layout,
-  Palette,
-  Smartphone,
+  Code2,
+  Layers,
   Zap,
-  Shield,
-  Globe,
+  Lock,
+  Server,
   ArrowRight,
   CheckCircle,
+  Terminal,
 } from 'lucide-react';
 import { Header, Footer } from '@/components/layout';
 import { Button, Card } from '@/components/ui';
 
 const features = [
   {
-    icon: Layout,
-    title: 'Drag & Drop Builder',
-    description: 'Easily arrange and customize blocks to build your perfect website layout.',
+    icon: Code2,
+    title: 'Advanced Builder',
+    description: 'Precision-engineered drag & drop interface for maximum control and efficiency.',
   },
   {
-    icon: Palette,
-    title: 'Beautiful Templates',
-    description: 'Start with professionally designed templates and make them your own.',
+    icon: Layers,
+    title: 'Modular Architecture',
+    description: 'Component-based system designed for scalability and maintainability.',
   },
   {
-    icon: Smartphone,
-    title: 'Mobile Friendly',
-    description: 'Your website looks great on any device, from phones to desktops.',
+    icon: Terminal,
+    title: 'Developer Tools',
+    description: 'Professional-grade tools built for modern web development workflows.',
   },
   {
     icon: Zap,
-    title: 'Lightning Fast',
-    description: 'Optimized for speed with instant loading and smooth animations.',
+    title: 'Performance Optimized',
+    description: 'Enterprise-level optimization delivering sub-second load times.',
   },
   {
-    icon: Shield,
-    title: 'Secure & Reliable',
-    description: 'Your data is safe with enterprise-grade security and regular backups.',
+    icon: Lock,
+    title: 'Enterprise Security',
+    description: 'Military-grade encryption with comprehensive data protection protocols.',
   },
   {
-    icon: Globe,
-    title: 'One-Click Publish',
-    description: 'Go live instantly with free hosting on your custom domain.',
+    icon: Server,
+    title: 'Instant Deployment',
+    description: 'One-command deployment to global edge infrastructure.',
   },
 ];
 
 const steps = [
-  { step: 1, title: 'Choose a Template', description: 'Pick from our collection of stunning templates' },
-  { step: 2, title: 'Customize Your Site', description: 'Add your content and make it uniquely yours' },
-  { step: 3, title: 'Publish & Share', description: 'Go live with one click and share with the world' },
+  { step: 1, title: 'Initialize Project', description: 'Select from production-ready architectural templates' },
+  { step: 2, title: 'Configure System', description: 'Customize components with precision controls' },
+  { step: 3, title: 'Deploy Pipeline', description: 'Launch to production with automated deployment' },
 ];
 
 export default function HomePage() {
@@ -62,70 +63,115 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-20 sm:py-32">
+      <section className="relative overflow-hidden px-4 py-24 sm:py-32 lg:py-40">
+        {/* Grid pattern background */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-br from-primary-400/20 to-purple-400/20 blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] dark:bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-surface-dark" />
         </div>
 
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.16, 0.8, 0.3, 1] }}
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-2 text-sm font-medium text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
-              <Sparkles className="h-4 w-4" />
-              No coding required
-            </div>
+            <motion.div 
+              className="mb-6 inline-flex items-center gap-2 border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-gray-700 dark:border-gray-800 dark:bg-surface-dark-elevated dark:text-gray-300"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 0.8, 0.3, 1] }}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Enterprise Web Platform
+            </motion.div>
 
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-              Create Your
-              <span className="bg-gradient-to-r from-primary-500 to-purple-500 bg-clip-text text-transparent">
-                {' '}Beautiful Website{' '}
-              </span>
-              in Minutes
-            </h1>
+            <motion.h1 
+              className="mb-6 max-w-4xl text-5xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl md:text-7xl lg:text-8xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 0.8, 0.3, 1] }}
+            >
+              Build Production-Grade
+              <motion.span 
+                className="block bg-gradient-to-r from-accent-teal to-primary-500 bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 0.8, 0.3, 1] }}
+              >
+                Digital Systems
+              </motion.span>
+            </motion.h1>
 
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-              Build stunning personal websites without any coding knowledge. Our intuitive 
-              drag-and-drop builder makes it easy for anyone to create their online presence.
-            </p>
+            <motion.p 
+              className="mb-8 max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-text-dark-secondary md:text-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 0.8, 0.3, 1] }}
+            >
+              Stack your way to success. Advanced web development platform engineered 
+              for professionals who demand enterprise-level performance.
+            </motion.p>
 
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <motion.div 
+              className="flex flex-col items-start gap-4 sm:flex-row"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 0.8, 0.3, 1] }}
+            >
               <Link href="/builder">
-                <Button size="lg">
-                  Start Building Free
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Button size="lg" className="group">
+                    Initialize Platform
+                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </motion.div>
               </Link>
               <Link href="/templates">
-                <Button variant="outline" size="lg">
-                  View Templates
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Button variant="outline" size="lg">
+                    View Architecture
+                  </Button>
+                </motion.div>
               </Link>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 
-        {/* Hero Preview */}
+        {/* Preview */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mx-auto mt-16 max-w-5xl px-4"
+          transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 0.8, 0.3, 1] }}
+          className="mx-auto mt-20 max-w-6xl px-4"
         >
-          <div className="overflow-hidden rounded-ios-xl border border-gray-200 bg-white shadow-ios-lg dark:border-gray-800 dark:bg-surface-dark-elevated">
-            <div className="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-800 dark:bg-surface-dark-secondary">
-              <div className="h-3 w-3 rounded-full bg-red-400" />
-              <div className="h-3 w-3 rounded-full bg-yellow-400" />
-              <div className="h-3 w-3 rounded-full bg-green-400" />
+          <div className="overflow-hidden border border-gray-200 bg-white shadow-palantir-lg dark:border-gray-800 dark:bg-surface-dark-elevated">
+            <div className="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-surface-dark-secondary">
+              <div className="h-2 w-2 rounded-full bg-red-500" />
+              <div className="h-2 w-2 rounded-full bg-yellow-500" />
+              <div className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="ml-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+                production-system-v1.0
+              </span>
             </div>
-            <div className="aspect-video bg-gradient-to-br from-primary-500 to-purple-600 p-8">
-              <div className="flex h-full flex-col items-center justify-center text-white">
-                <div className="mb-4 h-12 w-48 rounded-lg bg-white/20" />
-                <div className="mb-2 h-4 w-64 rounded bg-white/30" />
-                <div className="h-4 w-48 rounded bg-white/30" />
-                <div className="mt-6 h-10 w-32 rounded-lg bg-white/40" />
+            <div className="aspect-video bg-gradient-to-br from-surface-dark via-surface-dark-elevated to-surface-dark-secondary p-12">
+              <div className="flex h-full flex-col items-start justify-center text-white">
+                <div className="mb-4 h-8 w-64 bg-gradient-to-r from-accent-teal/40 to-transparent" />
+                <div className="mb-2 h-4 w-96 bg-gray-700" />
+                <div className="mb-2 h-4 w-80 bg-gray-700" />
+                <div className="h-4 w-72 bg-gray-700" />
+                <div className="mt-8 flex gap-3">
+                  <div className="h-10 w-28 border border-accent-teal/50" />
+                  <div className="h-10 w-28 border border-gray-700" />
+                </div>
               </div>
             </div>
           </div>
@@ -133,23 +179,24 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="border-t border-gray-200 bg-gray-50 px-4 py-20 dark:border-gray-800 dark:bg-surface-dark-elevated">
-        <div className="mx-auto max-w-6xl">
+      <section className="border-t border-gray-200 bg-gray-50 px-4 py-24 dark:border-gray-800 dark:bg-surface-dark-elevated">
+        <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-12 text-center"
+            className="mb-16"
           >
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-              Everything You Need to Build
+            <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-5xl">
+              Enterprise-Grade
+              <span className="block text-accent-teal">Capabilities</span>
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
-              Powerful features that make website building a breeze
+            <p className="max-w-2xl text-lg text-gray-600 dark:text-text-dark-secondary">
+              Built with the same principles that power mission-critical systems worldwide.
             </p>
           </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-px bg-gray-200 dark:bg-gray-800 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
@@ -157,20 +204,24 @@ export default function HomePage() {
                   key={feature.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ 
+                    duration: 0.5, 
+                    delay: index * 0.05,
+                    ease: [0.16, 0.8, 0.3, 1]
+                  }}
                 >
-                  <Card variant="elevated" className="h-full">
-                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-ios-lg bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+                  <div className="group h-full bg-white p-8 transition-all duration-300 hover:bg-gray-50 dark:bg-surface-dark dark:hover:bg-surface-dark-secondary">
+                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center border border-gray-200 bg-gray-50 text-gray-900 dark:border-gray-800 dark:bg-surface-dark-secondary dark:text-white">
                       <Icon className="h-6 w-6" />
                     </div>
                     <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-sm leading-relaxed text-gray-600 dark:text-text-dark-secondary">
                       {feature.description}
                     </p>
-                  </Card>
+                  </div>
                 </motion.div>
               );
             })}
@@ -179,45 +230,48 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="px-4 py-20">
-        <div className="mx-auto max-w-4xl">
+      <section className="border-t border-gray-200 px-4 py-24 dark:border-gray-800">
+        <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-12 text-center"
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: [0.16, 0.8, 0.3, 1] }}
+            className="mb-16"
           >
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-              How It Works
+            <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-5xl">
+              Deployment Protocol
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-600 dark:text-gray-400">
-              Get your website up and running in three simple steps
+            <p className="max-w-2xl text-lg text-gray-600 dark:text-text-dark-secondary">
+              Streamlined process from initialization to production deployment.
             </p>
           </motion.div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="space-y-12">
             {steps.map((item, index) => (
               <motion.div
                 key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative text-center"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: [0.16, 0.8, 0.3, 1]
+                }}
+                className="flex items-start gap-8 border-l-2 border-gray-200 pl-8 dark:border-gray-800"
               >
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-500 text-2xl font-bold text-white">
+                <div className="-ml-[41px] flex h-16 w-16 flex-shrink-0 items-center justify-center border-2 border-gray-200 bg-white font-mono text-2xl font-bold text-gray-900 dark:border-gray-800 dark:bg-surface-dark dark:text-white">
                   {item.step}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {item.description}
-                </p>
-                
-                {index < steps.length - 1 && (
-                  <div className="absolute left-[calc(50%+40px)] top-8 hidden h-0.5 w-[calc(100%-80px)] bg-gray-200 dark:bg-gray-700 md:block" />
-                )}
+                <div className="flex-1 pb-8">
+                  <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-text-dark-secondary">
+                    {item.description}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -225,43 +279,66 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-primary-500 to-purple-600 px-4 py-20 text-white">
-        <div className="mx-auto max-w-4xl text-center">
+      <section className="relative overflow-hidden border-t border-gray-200 bg-gradient-to-br from-surface-dark via-surface-dark-elevated to-surface-dark px-4 py-24 dark:border-gray-800">
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:24px_24px]" />
+        
+        <div className="relative mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: [0.16, 0.8, 0.3, 1] }}
           >
-            <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
-              Ready to Build Your Website?
+            <h2 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
+              Deploy Your System
+              <span className="block text-accent-teal">Today</span>
             </h2>
-            <p className="mb-8 text-lg opacity-90">
-              Join thousands of creators who have built their online presence with WebBuilder.
+            <p className="mb-8 max-w-2xl text-lg text-gray-300">
+              Join organizations deploying mission-critical applications with confidence.
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="flex flex-col items-start gap-4 sm:flex-row">
               <Link href="/builder">
                 <Button
                   size="lg"
-                  className="bg-white text-primary-600 hover:bg-gray-100"
+                  className="group border border-accent-teal bg-accent-teal text-surface-dark hover:bg-accent-teal/90"
                 >
-                  Get Started Free
-                  <ArrowRight className="h-5 w-5" />
+                  Start Deployment
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link href="/templates">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-gray-700 text-white hover:bg-surface-dark-secondary"
+                >
+                  View Documentation
                 </Button>
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                No credit card required
+            <div className="mt-12 grid gap-8 border-t border-gray-800 pt-8 sm:grid-cols-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 text-accent-teal" />
+                <div>
+                  <div className="font-semibold text-white">Zero Configuration</div>
+                  <div className="text-sm text-gray-400">Production-ready defaults</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                Free forever plan
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 text-accent-teal" />
+                <div>
+                  <div className="font-semibold text-white">Enterprise Security</div>
+                  <div className="text-sm text-gray-400">SOC 2 Type II certified</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                Deploy in seconds
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 flex-shrink-0 text-accent-teal" />
+                <div>
+                  <div className="font-semibold text-white">Global Infrastructure</div>
+                  <div className="text-sm text-gray-400">Edge deployment worldwide</div>
+                </div>
               </div>
             </div>
           </motion.div>

@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Sparkles, Sun, Moon } from 'lucide-react';
+import { Terminal, Sun, Moon } from 'lucide-react';
 import { useThemeStore } from '@/stores';
 import { Button } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -19,61 +19,71 @@ export const Header: React.FC<HeaderProps> = ({ className, showNav = true }) => 
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-ios',
-        'dark:border-gray-800 dark:bg-surface-dark/80',
+        'sticky top-0 z-50 border-b border-gray-200 bg-white/60 backdrop-blur-xl',
+        'dark:border-gray-800 dark:bg-surface-dark/60',
         className
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-ios-lg bg-gradient-to-br from-primary-500 to-primary-600">
-            <Sparkles className="h-5 w-5 text-white" />
+          <div className="flex h-7 w-7 items-center justify-center border border-gray-300 bg-gray-900 dark:border-gray-700 dark:bg-white">
+            <Terminal className="h-4 w-4 text-white dark:text-gray-900" />
           </div>
-          <span className="text-lg font-semibold text-gray-900 dark:text-white">
-            WebBuilder
+          <span className="font-mono text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            Stacky
           </span>
         </Link>
 
         {showNav && (
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-8 md:flex">
             <Link
               href="/"
-              className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="text-xs font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
-              Home
+              Platform
             </Link>
             <Link
               href="/templates"
-              className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="text-xs font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
-              Templates
+              Architecture
             </Link>
             <Link
               href="/builder"
-              className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="text-xs font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
-              Builder
+              Build
             </Link>
           </nav>
         )}
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon-sm" onClick={toggleTheme}>
+          <Button 
+            variant="ghost" 
+            size="icon-sm" 
+            onClick={toggleTheme}
+            className="hover:bg-gray-100 dark:hover:bg-surface-dark-secondary"
+          >
             <motion.div
               initial={false}
               animate={{ rotate: isDark ? 180 : 0 }}
               transition={{ duration: 0.3 }}
             >
               {isDark ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-4 w-4" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-4 w-4" />
               )}
             </motion.div>
           </Button>
 
           <Link href="/builder">
-            <Button size="sm">Start Building</Button>
+            <Button 
+              size="sm"
+              className="border border-gray-900 bg-gray-900 text-white hover:bg-gray-800 dark:border-gray-100 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+            >
+              Launch
+            </Button>
           </Link>
         </div>
       </div>
