@@ -4,3 +4,4 @@ export { StylePanel } from './StylePanel';
 export { SettingsPanel } from './SettingsPanel';
 export { EditorToolbar } from './EditorToolbar';
 export { EditorSidebar } from './EditorSidebar';
+export { BlockContextMenu, useContextMenu } from './BlockContextMenu';

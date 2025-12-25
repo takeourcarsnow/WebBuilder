@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { useWebsiteStore, useEditorStore, useSelectedBlock } from '@/stores';
-import { Input, Textarea, Select, Switch, ColorPicker, Slider } from '@/components/ui';
+import { useWebsiteStore, useEditorStore, useSelectedBlock, useHistoryStore } from '@/stores';
+import { Input, Textarea, Select, Switch, ColorPicker, Slider, GradientPicker } from '@/components/ui';
 import { getBlockDefinition } from '@/lib/constants';
 import { useDebouncedCallback } from '@/hooks';
 import { cn } from '@/lib/utils';
@@ -83,9 +83,25 @@ const DebouncedTextarea: React.FC<{
 DebouncedTextarea.displayName = 'DebouncedTextarea';
 
 export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
-  const { updateBlockContent, updateBlockStyle } = useWebsiteStore();
+  const { updateBlockContent, updateBlockStyle, website } = useWebsiteStore();
   const selectedBlock = useSelectedBlock();
+  const { pushState } = useHistoryStore();
   const definition = selectedBlock ? getBlockDefinition(selectedBlock.type) : null;
+
+  // Track changes for undo
+  const handleStyleChange = useCallback((styleUpdate: Parameters<typeof updateBlockStyle>[1]) => {
+    if (selectedBlock && website) {
+      pushState(website, 'Update block style');
+      updateBlockStyle(selectedBlock.id, styleUpdate);
+    }
+  }, [selectedBlock, website, updateBlockStyle, pushState]);
+
+  const handleContentChange = useCallback((contentUpdate: Parameters<typeof updateBlockContent>[1]) => {
+    if (selectedBlock && website) {
+      // Don't push state for every keystroke - debounced elsewhere
+      updateBlockContent(selectedBlock.id, contentUpdate);
+    }
+  }, [selectedBlock, website, updateBlockContent]);
 
   if (!selectedBlock) {
     return (
@@ -109,32 +125,32 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <DebouncedInput
               label="Headline"
               value={content.headline as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { headline: value })}
+              onChange={(value) => handleContentChange({ headline: value })}
               placeholder="Your main headline"
             />
             <DebouncedTextarea
               label="Subheadline"
               value={content.subheadline as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { subheadline: value })}
+              onChange={(value) => handleContentChange({ subheadline: value })}
               placeholder="Supporting text"
               rows={3}
             />
             <Switch
               label="Show Button"
               checked={content.showButton as boolean}
-              onCheckedChange={(checked) => updateBlockContent(selectedBlock.id, { showButton: checked })}
+              onCheckedChange={(checked) => handleContentChange({ showButton: checked })}
             />
             {content.showButton && (
               <>
                 <DebouncedInput
                   label="Button Text"
                   value={content.buttonText as string}
-                  onChange={(value) => updateBlockContent(selectedBlock.id, { buttonText: value })}
+                  onChange={(value) => handleContentChange({ buttonText: value })}
                 />
                 <DebouncedInput
                   label="Button Link"
                   value={content.buttonLink as string}
-                  onChange={(value) => updateBlockContent(selectedBlock.id, { buttonLink: value })}
+                  onChange={(value) => handleContentChange({ buttonLink: value })}
                   placeholder="#section or https://..."
                 />
               </>
@@ -148,24 +164,24 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <DebouncedInput
               label="Title"
               value={content.title as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { title: value })}
+              onChange={(value) => handleContentChange({ title: value })}
             />
             <DebouncedTextarea
               label="Description"
               value={content.description as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { description: value })}
+              onChange={(value) => handleContentChange({ description: value })}
               rows={5}
             />
             <Switch
               label="Show Image"
               checked={content.showImage as boolean}
-              onCheckedChange={(checked) => updateBlockContent(selectedBlock.id, { showImage: checked })}
+              onCheckedChange={(checked) => handleContentChange({ showImage: checked })}
             />
             {content.showImage && (
               <DebouncedInput
                 label="Image URL"
                 value={content.image as string}
-                onChange={(value) => updateBlockContent(selectedBlock.id, { image: value })}
+                onChange={(value) => handleContentChange({ image: value })}
                 placeholder="https://..."
               />
             )}
@@ -178,19 +194,19 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <Switch
               label="Show Heading"
               checked={content.showHeading as boolean}
-              onCheckedChange={(checked) => updateBlockContent(selectedBlock.id, { showHeading: checked })}
+              onCheckedChange={(checked) => handleContentChange({ showHeading: checked })}
             />
             {content.showHeading && (
               <DebouncedInput
                 label="Heading"
                 value={content.heading as string}
-                onChange={(value) => updateBlockContent(selectedBlock.id, { heading: value })}
+                onChange={(value) => handleContentChange({ heading: value })}
               />
             )}
             <DebouncedTextarea
               label="Body Text"
               value={content.body as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { body: value })}
+              onChange={(value) => handleContentChange({ body: value })}
               rows={6}
             />
           </div>
@@ -202,40 +218,40 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <DebouncedInput
               label="Headline"
               value={content.headline as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { headline: value })}
+              onChange={(value) => handleContentChange({ headline: value })}
             />
             <DebouncedTextarea
               label="Description"
               value={content.description as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { description: value })}
+              onChange={(value) => handleContentChange({ description: value })}
               rows={3}
             />
             <DebouncedInput
               label="Primary Button Text"
               value={content.primaryButtonText as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { primaryButtonText: value })}
+              onChange={(value) => handleContentChange({ primaryButtonText: value })}
             />
             <DebouncedInput
               label="Primary Button Link"
               value={content.primaryButtonLink as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { primaryButtonLink: value })}
+              onChange={(value) => handleContentChange({ primaryButtonLink: value })}
             />
             <Switch
               label="Show Secondary Button"
               checked={content.showSecondaryButton as boolean}
-              onCheckedChange={(checked) => updateBlockContent(selectedBlock.id, { showSecondaryButton: checked })}
+              onCheckedChange={(checked) => handleContentChange({ showSecondaryButton: checked })}
             />
             {content.showSecondaryButton && (
               <>
                 <DebouncedInput
                   label="Secondary Button Text"
                   value={content.secondaryButtonText as string}
-                  onChange={(value) => updateBlockContent(selectedBlock.id, { secondaryButtonText: value })}
+                  onChange={(value) => handleContentChange({ secondaryButtonText: value })}
                 />
                 <DebouncedInput
                   label="Secondary Button Link"
                   value={content.secondaryButtonLink as string}
-                  onChange={(value) => updateBlockContent(selectedBlock.id, { secondaryButtonLink: value })}
+                  onChange={(value) => handleContentChange({ secondaryButtonLink: value })}
                 />
               </>
             )}
@@ -248,24 +264,24 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <DebouncedInput
               label="Title"
               value={content.title as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { title: value })}
+              onChange={(value) => handleContentChange({ title: value })}
             />
             <DebouncedTextarea
               label="Subtitle"
               value={content.subtitle as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { subtitle: value })}
+              onChange={(value) => handleContentChange({ subtitle: value })}
               rows={2}
             />
             <DebouncedInput
               label="Email"
               value={content.email as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { email: value })}
+              onChange={(value) => handleContentChange({ email: value })}
               type="email"
             />
             <DebouncedInput
               label="Button Text"
               value={content.buttonText as string}
-              onChange={(value) => updateBlockContent(selectedBlock.id, { buttonText: value })}
+              onChange={(value) => handleContentChange({ buttonText: value })}
             />
           </div>
         );
@@ -276,7 +292,7 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
             <Slider
               label="Height"
               value={[content.height as number]}
-              onValueChange={(value) => updateBlockContent(selectedBlock.id, { height: value[0] })}
+              onValueChange={(value) => handleContentChange({ height: value[0] })}
               min={16}
               max={200}
               step={8}
@@ -299,22 +315,22 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
 
     return (
       <div className="space-y-4">
-        <ColorPicker
-          label="Background Color"
+        <GradientPicker
+          label="Background"
           value={style.backgroundColor || '#ffffff'}
-          onChange={(color) => updateBlockStyle(selectedBlock.id, { backgroundColor: color })}
+          onChange={(color) => handleStyleChange({ backgroundColor: color })}
         />
 
         <ColorPicker
           label="Text Color"
           value={style.textColor || '#000000'}
-          onChange={(color) => updateBlockStyle(selectedBlock.id, { textColor: color })}
+          onChange={(color) => handleStyleChange({ textColor: color })}
         />
 
         <Select
           label="Padding"
           value={style.padding || 'medium'}
-          onValueChange={(value) => updateBlockStyle(selectedBlock.id, { padding: value as typeof style.padding })}
+          onValueChange={(value) => handleStyleChange({ padding: value as typeof style.padding })}
           options={[
             { value: 'none', label: 'None' },
             { value: 'small', label: 'Small' },
@@ -326,7 +342,7 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
         <Select
           label="Alignment"
           value={style.alignment || 'center'}
-          onValueChange={(value) => updateBlockStyle(selectedBlock.id, { alignment: value as typeof style.alignment })}
+          onValueChange={(value) => handleStyleChange({ alignment: value as typeof style.alignment })}
           options={[
             { value: 'left', label: 'Left' },
             { value: 'center', label: 'Center' },
@@ -337,12 +353,36 @@ export const StylePanel: React.FC<StylePanelProps> = ({ className }) => {
         <Select
           label="Width"
           value={style.width || 'full'}
-          onValueChange={(value) => updateBlockStyle(selectedBlock.id, { width: value as typeof style.width })}
+          onValueChange={(value) => handleStyleChange({ width: value as typeof style.width })}
           options={[
             { value: 'narrow', label: 'Narrow' },
             { value: 'medium', label: 'Medium' },
             { value: 'wide', label: 'Wide' },
             { value: 'full', label: 'Full Width' },
+          ]}
+        />
+
+        <Select
+          label="Border Radius"
+          value={style.borderRadius || 'none'}
+          onValueChange={(value) => handleStyleChange({ borderRadius: value as typeof style.borderRadius })}
+          options={[
+            { value: 'none', label: 'None' },
+            { value: 'small', label: 'Small' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'large', label: 'Large' },
+          ]}
+        />
+
+        <Select
+          label="Shadow"
+          value={style.shadow || 'none'}
+          onValueChange={(value) => handleStyleChange({ shadow: value as typeof style.shadow })}
+          options={[
+            { value: 'none', label: 'None' },
+            { value: 'small', label: 'Small' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'large', label: 'Large' },
           ]}
         />
       </div>

@@ -19,10 +19,15 @@ import {
   ZoomOut,
   Save,
   Keyboard,
+  FileCode,
+  Copy,
+  Clipboard,
+  Clock,
 } from 'lucide-react';
-import { useEditorStore, useThemeStore, useWebsiteStore, useHistoryState } from '@/stores';
+import { useEditorStore, useThemeStore, useWebsiteStore, useCanUndo, useCanRedo, useHistoryStore, useClipboardStore, useHasClipboard } from '@/stores';
 import { Button, Tooltip, TooltipProvider, Modal } from '@/components/ui';
 import { getShortcutDescriptions } from '@/hooks';
+import { downloadHtmlFile } from '@/lib/utils/exportHtml';
 import { cn } from '@/lib/utils';
 import type { DevicePreview } from '@/stores/editorStore';
 
@@ -43,16 +48,30 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
     isSidebarOpen,
     setSidebarOpen,
     addNotification,
-    undo,
-    redo,
+    selectedBlockId,
+    setSelectedBlock,
   } = useEditorStore();
 
-  const { canUndo, canRedo } = useHistoryState();
+  const canUndo = useCanUndo();
+  const canRedo = useCanRedo();
+  const { undo: historyUndo, redo: historyRedo, getHistoryInfo } = useHistoryStore();
   const { isDark, toggleTheme } = useThemeStore();
-  const { website } = useWebsiteStore();
+  const { website, setCurrentWebsite, deleteBlock } = useWebsiteStore();
+  const { copyBlock, pasteBlock } = useClipboardStore();
+  const hasClipboard = useHasClipboard();
+  
   const [showShortcuts, setShowShortcuts] = React.useState(false);
+  const [showExportMenu, setShowExportMenu] = React.useState(false);
+  const [lastSaved, setLastSaved] = React.useState<Date>(new Date());
 
-  const handleExport = () => {
+  // Update last saved when website changes
+  React.useEffect(() => {
+    if (website?.updatedAt) {
+      setLastSaved(new Date(website.updatedAt));
+    }
+  }, [website?.updatedAt]);
+
+  const handleExportJson = () => {
     if (!website) return;
 
     const data = JSON.stringify(website, null, 2);
@@ -66,25 +85,83 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
 
     addNotification({
       type: 'success',
-      message: 'Website exported successfully',
+      message: 'Website exported as JSON',
     });
+    setShowExportMenu(false);
+  };
+
+  const handleExportHtml = () => {
+    if (!website) return;
+
+    downloadHtmlFile(website);
+    addNotification({
+      type: 'success',
+      message: 'Website exported as HTML',
+    });
+    setShowExportMenu(false);
   };
 
   const handleSave = () => {
+    setLastSaved(new Date());
     addNotification({
       type: 'success',
-      message: 'Changes saved automatically',
+      message: 'Changes saved',
     });
   };
 
   const handleUndo = () => {
-    undo();
-    addNotification({ type: 'info', message: 'Undo', duration: 1500 });
+    if (canUndo) {
+      const previousState = historyUndo();
+      if (previousState) {
+        setCurrentWebsite(previousState);
+        addNotification({ type: 'info', message: 'Undo', duration: 1500 });
+      }
+    }
   };
 
   const handleRedo = () => {
-    redo();
-    addNotification({ type: 'info', message: 'Redo', duration: 1500 });
+    if (canRedo) {
+      const nextState = historyRedo();
+      if (nextState) {
+        setCurrentWebsite(nextState);
+        addNotification({ type: 'info', message: 'Redo', duration: 1500 });
+      }
+    }
+  };
+
+  const handleCopy = () => {
+    if (selectedBlockId && website) {
+      const block = website.blocks.find(b => b.id === selectedBlockId);
+      if (block) {
+        copyBlock(block);
+        addNotification({ type: 'success', message: 'Block copied', duration: 1500 });
+      }
+    }
+  };
+
+  const handlePaste = () => {
+    if (hasClipboard && website) {
+      const pastedBlock = pasteBlock();
+      if (pastedBlock) {
+        pastedBlock.order = website.blocks.length;
+        setCurrentWebsite({
+          ...website,
+          blocks: [...website.blocks, pastedBlock],
+          updatedAt: new Date(),
+        });
+        setSelectedBlock(pastedBlock.id);
+        addNotification({ type: 'success', message: 'Block pasted', duration: 1500 });
+      }
+    }
+  };
+
+  const formatLastSaved = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   const deviceButtons: { device: DevicePreview; icon: typeof Monitor; label: string }[] = [
@@ -92,6 +169,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
     { device: 'tablet', icon: Tablet, label: 'Tablet view' },
     { device: 'mobile', icon: Smartphone, label: 'Mobile view' },
   ];
+
+  const historyInfo = getHistoryInfo();
 
   return (
     <TooltipProvider>
@@ -120,7 +199,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
 
           <div className="mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
-          <Tooltip content="Undo (Ctrl+Z)">
+          <Tooltip content={`Undo (Ctrl+Z)${historyInfo.lastAction ? ` - ${historyInfo.lastAction}` : ''}`}>
             <Button 
               variant="ghost" 
               size="icon-sm" 
@@ -144,6 +223,31 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
 
           <div className="mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
+          {/* Copy/Paste buttons */}
+          <Tooltip content="Copy block (Ctrl+C)">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={handleCopy}
+              disabled={!selectedBlockId}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+          </Tooltip>
+
+          <Tooltip content="Paste block (Ctrl+V)">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={handlePaste}
+              disabled={!hasClipboard}
+            >
+              <Clipboard className="h-4 w-4" />
+            </Button>
+          </Tooltip>
+
+          <div className="mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700" />
+
           <Tooltip content="Keyboard shortcuts">
             <Button
               variant="ghost"
@@ -155,11 +259,15 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
           </Tooltip>
         </div>
 
-        {/* Center section - Website name */}
-        <div className="absolute left-1/2 -translate-x-1/2">
+        {/* Center section - Website name + save status */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
           <h1 className="text-sm font-medium text-gray-900 dark:text-white">
             {website?.name || 'Untitled Website'}
           </h1>
+          <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+            <Clock className="h-3 w-3" />
+            Saved {formatLastSaved(lastSaved)}
+          </span>
         </div>
 
         {/* Right section */}
@@ -248,12 +356,43 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ className }) => {
 
           <div className="mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
-          {/* Actions */}
-          <Tooltip content="Export">
-            <Button variant="ghost" size="icon-sm" onClick={handleExport}>
-              <Download className="h-4 w-4" />
-            </Button>
-          </Tooltip>
+          {/* Export dropdown */}
+          <div className="relative">
+            <Tooltip content="Export website">
+              <Button 
+                variant="ghost" 
+                size="icon-sm" 
+                onClick={() => setShowExportMenu(!showExportMenu)}
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+            </Tooltip>
+            
+            {showExportMenu && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setShowExportMenu(false)} 
+                />
+                <div className="absolute right-0 top-full mt-2 z-50 w-48 rounded-ios-lg border border-gray-200 bg-white p-1 shadow-ios dark:border-gray-700 dark:bg-surface-dark-elevated">
+                  <button
+                    onClick={handleExportJson}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
+                  >
+                    <Download className="h-4 w-4" />
+                    Export as JSON
+                  </button>
+                  <button
+                    onClick={handleExportHtml}
+                    className="flex w-full items-center gap-2 rounded-ios px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-surface-dark-secondary"
+                  >
+                    <FileCode className="h-4 w-4" />
+                    Export as HTML
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
 
           <Button variant="primary" size="sm" onClick={handleSave}>
             <Save className="h-4 w-4" />

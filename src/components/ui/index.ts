@@ -9,6 +9,7 @@ export { Modal, ModalTrigger } from './Modal';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 export { Tooltip, TooltipProvider } from './Tooltip';
 export { ColorPicker } from './ColorPicker';
+export { GradientPicker } from './GradientPicker';
 export { NotificationContainer } from './Notification';
 export { EmptyState } from './EmptyState';
 export { ErrorBoundary, BlockErrorBoundary, withErrorBoundary } from './ErrorBoundary';
